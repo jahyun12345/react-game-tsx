@@ -16,7 +16,7 @@ export default function Gugudan() {
     const [result, setResult] = useState('');
 
     const onChangeValue = (event:any) => {
-        setValue(event.target.value);
+        setValue(event.currentTarget.value);
     }
 
     const onSubmitResult = (event:any) => {
