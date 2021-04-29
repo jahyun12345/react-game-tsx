@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Try from './Sections/Try';
 
 // 숫자 네 개를 겹치지 않고 랜덤하게 뽑는 함수
@@ -16,6 +16,12 @@ function getNumbers() {
 }
 
 export default function NumberBaseball() {
+    const inputRef:any = React.useRef(null);
+
+    useEffect(() => {
+        inputRef.current.focus();
+    }, []);
+
     const [value, setValue] = useState('');
     const [result, setResult] = useState('');
     const [answer, setAnswer] = useState(getNumbers());
@@ -35,7 +41,8 @@ export default function NumberBaseball() {
             setValue('');
             setAnswer(getNumbers());
             setTries([]);
-        // 틀림
+            inputRef.current.focus();
+            // 틀림
         } else {
             const answerArray = value.split('').map((value:any) => parseInt(value));
             let strike = 0;
@@ -47,6 +54,8 @@ export default function NumberBaseball() {
                 setValue('');
                 setAnswer(getNumbers());
                 setTries([]);
+                inputRef.current.focus();
+
             // 아직 기회 있음
             } else {
                 for (let i = 0; i <4; i++) {
@@ -56,7 +65,9 @@ export default function NumberBaseball() {
                         ball++;
                     }
                 }
+                setValue('');
                 setTries((prevTries:any) => { return [...prevTries, {try:value, result:`${strike} 스트라이크, ${ball} 볼입니다.`}]});
+                inputRef.current.focus();
             }
         }
     }
@@ -65,7 +76,7 @@ export default function NumberBaseball() {
         <div style={{display:'flex', flexDirection:'column', fontSize:'1.5rem'}}>
             <h1>{result}</h1>
             <form onSubmit={onSubmitResult}>
-                <input maxLength={4} value={value} onChange={onChangeValue}/>
+                <input ref={inputRef} maxLength={4} value={value} onChange={onChangeValue}/>
                 <button type="submit" onClick={onSubmitResult}>input</button>
             </form>
             <div>시도 : {tries.length}</div>

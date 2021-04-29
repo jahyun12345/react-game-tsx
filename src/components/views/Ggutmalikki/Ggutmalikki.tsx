@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from 'react';
 
 export default function Ggutmalikki() {
+    const inputRef:any = React.useRef(null);
+
     useEffect(() => {
         inputRef.current.focus();
     }, []);
-
-    const inputRef:any = React.useRef(null);
 
     const [word, setWord] = useState('꿀단지');
     const [value, setValue] = useState('');
