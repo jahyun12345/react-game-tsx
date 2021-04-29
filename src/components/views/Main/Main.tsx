@@ -7,6 +7,7 @@ export default function Main() {
             <a href="/test">TEST</a>
             <a href="/gugudan">GUGUDAN</a>
             <a href="/ggutmalikki">GGUTMALIKKI</a>
+            <a href="/numberbaseball">NUMBERBASEBALL</a>
         </div>
     );
 }
