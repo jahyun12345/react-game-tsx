@@ -25,7 +25,7 @@ export default function Gugudan() {
     return (
         <div style={{display:'flex', flexDirection:'column', fontSize:'1.5rem'}}>
             {first} x {second} ?
-            <form onSubmit={(e) => submitResult(e)}>
+            <form onSubmit={submitResult}>
                 <input 
                     type="number" 
                     value={value} 
@@ -33,7 +33,7 @@ export default function Gugudan() {
                 />
                 <button 
                     type="submit" 
-                    onClick={(e) => submitResult(e)}
+                    onClick={submitResult}
                 >
                     input
                 </button>
