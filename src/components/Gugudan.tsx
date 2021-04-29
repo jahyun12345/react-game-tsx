@@ -1,6 +1,13 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 
 export default function Gugudan() {
+    var input:any;
+
+    useEffect(() => {
+        // document.querySelector('input')?.focus();
+        input.focus();
+    }, []);
+
     const [first, setFirst] = useState(Math.floor(Math.random() * 9));
     const [second, setSecond] = useState(Math.floor(Math.random() * 9));
     const [value, setValue] = useState('');
@@ -9,6 +16,9 @@ export default function Gugudan() {
 
     const submitResult = (event:any) => {
         event.preventDefault();
+        // document.querySelector('input')?.focus();
+        input.focus();
+
         if (parseInt(value) === (first * second)) {
             setInputValue(value);
             setResult('Correct!');
@@ -22,6 +32,7 @@ export default function Gugudan() {
         }
     }
 
+
     return (
         <div style={{display:'flex', flexDirection:'column', fontSize:'1.5rem'}}>
             {first} x {second} ?
@@ -30,6 +41,7 @@ export default function Gugudan() {
                     type="number" 
                     value={value} 
                     onChange={(e) => setValue(e.target.value)} 
+                    ref={(c) => input = c}
                 />
                 <button 
                     type="submit" 
