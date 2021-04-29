@@ -6,6 +6,7 @@ export default function Main() {
             <a href="/">MAIN</a>
             <a href="/test">TEST</a>
             <a href="/gugudan">GUGUDAN</a>
+            <a href="/ggutmalikki">GGUTMALIKKI</a>
         </div>
     );
 }

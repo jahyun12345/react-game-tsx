@@ -3,9 +3,10 @@ import React from 'react';
 // import './App.css';
 import { Route, Switch } from "react-router-dom";
 
-import Main from './Main';
-import Test from './Test';
-import Gugudan from './Gugudan';
+import Main from './Main/Main';
+import Test from './Test/Test';
+import Gugudan from './Gugudan/Gugudan';
+import Ggutmalikki from './Ggutmalikki/Ggutmalikki';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
       <Route exact path="/" component={Main} />
       <Route exact path="/test" component={Test} />
       <Route exact path="/gugudan" component={Gugudan} />
+      <Route exact path="/ggutmalikki" component={Ggutmalikki} />
     </Switch>
 
   );
