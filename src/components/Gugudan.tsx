@@ -1,33 +1,37 @@
 import React, {useEffect, useState} from 'react';
 
 export default function Gugudan() {
-    var input:any;
+    // var input:any;
+    const inputRef:any = React.useRef(null);
 
     useEffect(() => {
         // document.querySelector('input')?.focus();
-        input.focus();
+        // input.focus();
+        inputRef.current.focus();
     }, []);
 
     const [first, setFirst] = useState(Math.floor(Math.random() * 9));
     const [second, setSecond] = useState(Math.floor(Math.random() * 9));
     const [value, setValue] = useState('');
-    const [inputValue, setInputValue] = useState('');
     const [result, setResult] = useState('');
 
-    const submitResult = (event:any) => {
+    const onChangeValue = (event:any) => {
+        setValue(event.target.value);
+    }
+
+    const onSubmitResult = (event:any) => {
         event.preventDefault();
         // document.querySelector('input')?.focus();
-        input.focus();
+        // input.focus();
+        inputRef.current.focus();
 
         if (parseInt(value) === (first * second)) {
-            setInputValue(value);
-            setResult('Correct!');
+            setResult('=' + value + ' : Correct!');
             setFirst(Math.floor(Math.random() * 9));
             setSecond(Math.floor(Math.random() * 9));
             setValue('');
         } else if (parseInt(value) !== (first * second)) {
-            setInputValue(value);
-            setResult('Uncorrect!');
+            setResult('=' + value + ' : Uncorrect!');
             setValue('');
         }
     }
@@ -36,23 +40,22 @@ export default function Gugudan() {
     return (
         <div style={{display:'flex', flexDirection:'column', fontSize:'1.5rem'}}>
             {first} x {second} ?
-            <form onSubmit={submitResult}>
+            <form onSubmit={onSubmitResult}>
                 <input 
                     type="number" 
                     value={value} 
-                    onChange={(e) => setValue(e.target.value)} 
-                    ref={(c) => input = c}
+                    onChange={onChangeValue} 
+                    // ref={(c) => input = c}
+                    ref={inputRef}
                 />
                 <button 
                     type="submit" 
-                    onClick={submitResult}
+                    onClick={onSubmitResult}
                 >
                     input
                 </button>
             </form>
-            <div style={{display:'flex'}}>
-                {inputValue !== '' && <span style={{paddingRight:'5px'}}>= {inputValue} : </span>} {result}
-            </div>
+            {result}
         </div>
     );
 }
