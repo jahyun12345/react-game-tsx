@@ -1,9 +1,16 @@
-import React from 'react';
+import React, {useState} from 'react';
 
 export default function Test() {
+    const [liked, setLiked] = useState(false);
+
     return(
         <React.Fragment>
-            <button>Like</button>
+            <button 
+                onClick={() => {setLiked(!liked);}} 
+                type="submit"
+            >
+                {liked ? 'Liked' : 'Like'}
+            </button>
         </React.Fragment>
     );
 }
