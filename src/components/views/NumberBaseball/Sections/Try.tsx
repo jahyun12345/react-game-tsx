@@ -1,8 +1,14 @@
 import React from 'react';
 
-export default function Try() {
+interface TryProps {
+    value:any,
+    index:any
+}
+
+export default function Try(props:TryProps) {
     return (
-        // <li key={index}>{item}</li>
-        <div>Try</div>
+        <li>
+            <b>{props.value}</b> - {props.index}
+        </li>
     );
 }

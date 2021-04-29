@@ -46,7 +46,7 @@ export default class NumberBaseball extends React.Component<NumberBaseballProps,
                 <div>시도 : {this.state.tries.length}</div>
                 <ul>
                     {this.state.tries.map((item, index) => (
-                        <Try key={index} />                        
+                        <Try key={index} value={item} index={index} />                        
                     ))}
                 </ul>
             </div>
