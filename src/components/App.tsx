@@ -8,6 +8,7 @@ import Test from './views/Test/Test';
 import Gugudan from './views/Gugudan/Gugudan';
 import Ggutmalikki from './views/Ggutmalikki/Ggutmalikki';
 import NumberBaseball from './views/NumberBaseball/NumberBaseball';
+import Responsecheck from './views/Responsecheck/Responsecheck';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
       <Route exact path="/gugudan" component={Gugudan} />
       <Route exact path="/ggutmalikki" component={Ggutmalikki} />
       <Route exact path="/numberbaseball" component={NumberBaseball} />
+      <Route exact path="/responsecheck" component={Responsecheck} />
     </Switch>
 
   );
