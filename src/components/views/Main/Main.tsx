@@ -9,6 +9,7 @@ export default function Main() {
             <a href="/ggutmalikki">GGUTMALIKKI</a>
             <a href="/numberbaseball">NUMBERBASEBALL</a>
             <a href="/responsecheck">RESPONSECHECK</a>
+            <a href="/rsp">RSP</a>
         </div>
     );
 }
