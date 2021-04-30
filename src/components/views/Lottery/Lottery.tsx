@@ -1,5 +1,9 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useMemo, useCallback} from 'react';
 import Ball from './Sections/Ball';
+
+// useMemo : 함수 리턴 값 기억
+// useCallback : 함수 자체 기억 => useEffect처럼 변화값 설정 필요
+// useCallback : 자식 component에 props로 함수 전달할 때 사용 필요
 
 // state 사용하지 않는 method 편리 위해 분리
 function getWinNumbers() {
@@ -18,8 +22,10 @@ function getWinNumbers() {
 }
 
 export default function Lottery() {
+    // state 값이 바뀌어도 함수 리턴 값을 기억하고 있기 때문에 한 번만 실행
+    const lotteryNumbers = useMemo(() => getWinNumbers(),  []);
     type WinNumbers = any;
-    const [winNumbers, setWinNumbers] = useState<WinNumbers>(getWinNumbers());
+    const [winNumbers, setWinNumbers] = useState<WinNumbers>(lotteryNumbers);
     const [winBalls, setWinBalls] = useState(Array());
     const [bonus, setBonus] = useState(null);
     const [redo, setRedo] = useState(false);
