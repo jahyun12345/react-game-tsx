@@ -41,6 +41,7 @@ export default function RSP() {
     // componentDidMount && componentDidUpdate와 비슷한 역할
     // [] : componentDidMount
     // [xxx] : componentDidUpdate
+    // state 값마다 다른 effect 원하는 경우 있기 때문에 여러번 사용 가능
     useEffect(() => {
         interval.current = setInterval(changeHand, 100);
         // componentWillUnmount 역할

@@ -10,6 +10,7 @@ export default function Main() {
             <a href="/numberbaseball">NUMBERBASEBALL</a>
             <a href="/responsecheck">RESPONSECHECK</a>
             <a href="/rsp">RSP</a>
+            <a href="/lottery">LOTTERY</a>
         </div>
     );
 }
