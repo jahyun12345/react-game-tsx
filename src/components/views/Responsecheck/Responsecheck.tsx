@@ -56,11 +56,18 @@ export default class Responsecheck extends React.Component<ResponsecheckProps, R
         }
     }
 
+    onReset = () => {
+        this.setState({result:[]});
+    }
+
     renderAverage = () => {
         const { result } = this.state;
         return (
             result.length > 0 &&
-            <div>Average Time : {result.reduce((a:any, c:any) => a + c) / result.length}ms</div>
+            <React.Fragment>
+                <div>Average-Time : {result.reduce((a:any, c:any) => a + c) / result.length}ms</div>
+                <button onClick={this.onReset}>reset</button>
+            </React.Fragment>
         );
     }
     
