@@ -15,16 +15,28 @@ interface RSPState {
     imgCoord:any
 }
 
-const rspCoords = {
+const rspCoords:any = {
     rock:'0',
     scissor:'-142px',
     paper:'-284px'
 }
 
-const scores = {
-    rock:1,
+const scores:any = {
+    rock:-1,
     scissor:0,
-    paper:-1
+    paper:1
+}
+
+const computerChoice = (imgCoord:any) => {
+    let computerValue = '';
+    if (Object.entries(rspCoords) !== undefined) {
+        Object.entries(rspCoords).find(function(v) {
+            if ((v !== undefined) && (v[1] === imgCoord)) {
+                computerValue = v[0];
+            }
+        })
+    }
+    return computerValue;
 }
 
 export default class RSP extends React.Component<RSPProps, RSPState> {
@@ -39,22 +51,24 @@ export default class RSP extends React.Component<RSPProps, RSPState> {
     // 첫 랜더 실행 후 실행(리랜더링 이후 실행 X)
     // 비동기 요청
     componentDidMount() {
-        this.interval = setInterval(() => {
-            const {imgCoord} = this.state;
-            if (imgCoord == rspCoords.rock) {
-                this.setState({
-                    imgCoord:rspCoords.scissor
-                })
-            } else if (imgCoord == rspCoords.scissor) {
-                this.setState({
-                    imgCoord:rspCoords.paper
-                })
-            } else if (imgCoord == rspCoords.paper) {
-                this.setState({
-                    imgCoord:rspCoords.rock
-                })
-            }
-        }, 1000)
+        this.interval = setInterval(this.changeHand, 100)
+    }
+
+    changeHand = () => {
+        const {imgCoord} = this.state;
+        if (imgCoord === rspCoords.rock) {
+            this.setState({
+                imgCoord:rspCoords.scissor
+            })
+        } else if (imgCoord === rspCoords.scissor) {
+            this.setState({
+                imgCoord:rspCoords.paper
+            })
+        } else if (imgCoord === rspCoords.paper) {
+            this.setState({
+                imgCoord:rspCoords.rock
+            })
+        }
     }
 
     // 리랜더링 이후 실행
@@ -68,7 +82,33 @@ export default class RSP extends React.Component<RSPProps, RSPState> {
     }
     
     onClickBtn = (input:any) => {
-        console.log(input);
+        const {imgCoord} = this.state;
+        // 가위바위보 멈춰서 점수 계산할 수 있도록
+        clearInterval(this.interval);
+        const myScore = scores[input];
+        const cpuScore = scores[computerChoice(imgCoord)];
+        const scoreResult = myScore - cpuScore;
+        // 비김
+        if (scoreResult === 0) {
+            this.setState({result:'Try Again!'});
+        // 이김
+        } else if ([-1, 2].includes(scoreResult)) {
+            this.setState((prevState:any) => {
+                return {
+                    result:'You Win!',
+                    score:prevState.score + 1
+                }});
+        // 짐
+        } else {
+            this.setState((prevState:any) => {
+                return {
+                    result:'You Lose!',
+                    score:prevState.score - 1
+                }});        
+        }
+        setTimeout(() => {
+            this.interval = setInterval(this.changeHand, 100)
+        }, 2000)
     }
 
     render() {
