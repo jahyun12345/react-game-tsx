@@ -1,4 +1,4 @@
-import React, {useReducer, createContext, useMemo} from 'react';
+import React, {useReducer, createContext, useMemo, useEffect} from 'react';
 import './MineSearch.css';
 import Form from './Sections/Form';
 import Table from './Sections/Table';
@@ -60,9 +60,15 @@ export const TableContext = createContext({
 
 const initialState:any = {
     tableData:[],
+    data:{
+        row:0,
+        cell:0,
+        mine:0
+    },
     timer:0,
     result:'',
-    halted:true
+    halted:true,
+    openedCount:0
 }
 
 export const START_GAME = 'START_GAME';
@@ -71,14 +77,21 @@ export const CLICK_MINE = 'CLICK_MINE';
 export const FLAG_CELL = 'FLAG_CELL';
 export const QUESTION_CELL = 'QUESTION_CELL';
 export const NORMALIZE_CELL = 'NORMALIZE_CELL';
+export const INCREMENT_TIMER = 'INCREMENT_TIMER';
 
 const reducer = (state:any, action:any) => {
     switch (action.type) {
         case START_GAME: 
             return {
                 ...state,
+                data:{
+                    row:action.row, 
+                    cell:action.cell, 
+                    mine:action.mine
+                },
                 tableData:plantMine(action.row, action.cell, action.mine),
-                halted:false
+                halted:false,
+                timer:0
             }
         case OPEN_CELL: {
             const tableData = [...state.tableData];
@@ -88,6 +101,7 @@ const reducer = (state:any, action:any) => {
                 tableData[i] = [...state.tableData[i]];
             })
             const checked:any = [];
+            let openedCount:any = 0;
             const checkAround = (row:any, cell:any) => {
                 // 이미 열려있는 칸에서 작동되지 않도록 설정
                 if ([CODE.OPENED, CODE.FLAG_MINE, CODE.FLAG, CODE.QUESTION_MINE, CODE.QUESTION].includes([row][cell])) {
@@ -105,6 +119,7 @@ const reducer = (state:any, action:any) => {
                     checked.push(row + ',' + cell);
                 }
                 // tableData[row][cell] = CODE.OPENED;
+                openedCount += 1;
                 // 남은 지뢰 개수 표시
                 let around:any = [];
                 if (tableData[row - 1]) {
@@ -157,9 +172,19 @@ const reducer = (state:any, action:any) => {
                 }
             }
             checkAround(action.row, action.cell);
+            let halted = false;
+            let result = '';
+            // win
+            if (state.data.row * state.data.cell - state.data.mine === state.openedCount + openedCount) {
+                 halted = true;
+                 result = `${state.timer}s You win!`
+            }
             return {
                 ...state,
-                tableData
+                tableData,
+                openedCount:state.openedCount + openedCount,
+                halted,
+                result
             }
         }
         case CLICK_MINE: {
@@ -211,6 +236,13 @@ const reducer = (state:any, action:any) => {
                 tableData
             }
         }
+        case INCREMENT_TIMER: {
+            return {
+                ...state,
+                timer:state.timer + 1
+            }
+        }
+
         default: return false;
     }
 }
@@ -222,6 +254,18 @@ export default function MineSearch() {
     const value:any = useMemo(() => (
         {tableData:tableData, halted:halted, dispatch}
     ), [tableData, halted]);
+
+    useEffect(() => {
+        let timer:any;
+        if (!halted) {
+            timer = setInterval(() => {
+                dispatch({type:INCREMENT_TIMER});
+            }, 1000);
+        }
+        return () => {
+            clearInterval(timer);
+        }
+    }, [halted])
 
     return (
         <TableContext.Provider value={value}>
