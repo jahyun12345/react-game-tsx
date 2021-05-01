@@ -11,6 +11,7 @@ import NumberBaseball from './views/NumberBaseball/NumberBaseball';
 import Responsecheck from './views/Responsecheck/Responsecheck';
 import RSP from './views/RSP/RSP';
 import Lottery from './views/Lottery/Lottery';
+import Tiktaktoe from './views/Tiktaltoe/Tiktaktoe';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
       <Route exact path="/responsecheck" component={Responsecheck} />
       <Route exact path="/rsp" component={RSP} />
       <Route exact path="/lottery" component={Lottery} />
+      <Route exact path="/tiktaktoe" component={Tiktaktoe} />
     </Switch>
   );
 }

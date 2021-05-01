@@ -11,6 +11,7 @@ export default function Main() {
             <a href="/responsecheck">RESPONSECHECK</a>
             <a href="/rsp">RSP</a>
             <a href="/lottery">LOTTERY</a>
+            <a href="/tiktaktoe">TIKTAKTOE</a>
         </div>
     );
 }
