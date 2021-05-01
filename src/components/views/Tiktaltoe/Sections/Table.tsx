@@ -1,7 +1,7 @@
-import React from 'react';
+import React, {memo} from 'react';
 import Tr from './Tr';
 
-const Table = (props:any) =>{
+const Table = memo((props:any) =>{
     // tableData:[['','',''],['','',''],['','','']]
     const {onClick, tableData, dispatch} = props;
 
@@ -12,6 +12,6 @@ const Table = (props:any) =>{
             </tbody>
         </table>
     );
-}
+})
 
 export default Table;
