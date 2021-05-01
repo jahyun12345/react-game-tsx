@@ -3,11 +3,11 @@ import Td from './Td';
 
 const Tr = (props:any) =>{
     // rowData:['','','']
-    const {rowData} = props;
+    const {rowData, rowIndex, dispatch} = props;
     
     return(
         <tr>
-            {rowData.map((td:any, index:any) => (<Td key={index} />))}
+            {rowData.map((td:any, index:any) => (<Td key={index} rowIndex={rowIndex} cellIndex={index} cellData={rowData[index]} dispatch={dispatch} />))}
         </tr>
     );
 }

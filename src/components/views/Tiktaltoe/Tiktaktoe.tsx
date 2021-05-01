@@ -6,10 +6,16 @@ import Table from './Sections/Table';
 const initialState:any = {
     winner:'',
     turn:'O',
-    tableData:[['','',''],['','',''],['','','']]
+    tableData:[
+        ['','',''],
+        ['','',''],
+        ['','','']
+    ]
 }
 
-const SET_WINNER = 'SET_WINNER';
+export const SET_WINNER = 'SET_WINNER';
+export const CLICK_CELL = 'CLICK_CELL';
+export const CHANGE_TURN = 'CHANGE_TURN';
 
 // state 어떻게 바꿀지 정의
 const reducer = (state:any, action:any) => {
@@ -21,6 +27,22 @@ const reducer = (state:any, action:any) => {
                 ...state,
                 winner: action.winner,
             }
+        case CLICK_CELL: {
+            const tableData = [...state.tableData];
+            // immer : 가독성 해결 library 사용 가능
+            tableData[action.row] = [...tableData[action.row]];
+            tableData[action.row][action.cell] = state.turn;
+            return {
+                ...state,
+                tableData
+            }
+        }
+        case CHANGE_TURN: {
+            return {
+                ...state,
+                turn: state.turn === 'O' ? 'X' : 'O',
+            }
+        }
     }
 
 }
@@ -36,7 +58,7 @@ export default function Tiktaktoe() {
 
     return(
         <React.Fragment>
-            <Table onClick={onClickTable} tableData={state.tableData} />
+            <Table onClick={onClickTable} tableData={state.tableData} dispatch={dispatch} />
             {state.winner && <div>{state.winner} win!</div>}
         </React.Fragment>
     );
