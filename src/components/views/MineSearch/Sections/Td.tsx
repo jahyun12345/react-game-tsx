@@ -1,4 +1,4 @@
-import React, {useContext, useCallback} from 'react';
+import React, {useContext, useCallback, memo, useMemo} from 'react';
 import {CODE, TableContext, OPEN_CELL, CLICK_MINE, FLAG_CELL, QUESTION_CELL, NORMALIZE_CELL} from '../MineSearch';
 
 const getTdStyle = (code:any) => {
@@ -49,7 +49,7 @@ const getTdText = (code:any) => {
     }
 }
 
-const Td = (props:any) => {
+const Td = memo((props:any) => {
     const {rowIndex, cellIndex} = props;
     const {tableData, dispatch, halted} = useContext(TableContext);
 
@@ -97,7 +97,10 @@ const Td = (props:any) => {
         }
     }, [tableData[rowIndex][cellIndex], halted]);
 
-    return(
+    // useContext 사용하면 계속해서 리랜더링 됨
+    // useMemo 사용하여 값 caching 되도록
+    // method로 분리하여 memo 적용하는 방법도 있음
+    return useMemo(() => (
         <td
             style={getTdStyle(tableData[rowIndex][cellIndex])}
             onClick={onClickTd}
@@ -106,7 +109,7 @@ const Td = (props:any) => {
         >
             {getTdText(tableData[rowIndex][cellIndex])}
         </td>
-    );
-}
+    ), [])
+})
 
 export default Td;

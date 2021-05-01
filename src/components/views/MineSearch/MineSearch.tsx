@@ -176,9 +176,9 @@ const reducer = (state:any, action:any) => {
             let result = '';
             // win
             if (state.data.row * state.data.cell - state.data.mine === state.openedCount + openedCount) {
-                 halted = true;
-                 result = `${state.timer}s You win!`
+                 halted = true; 
             }
+                 result = `${state.timer}s You win!`;
             return {
                 ...state,
                 tableData,
