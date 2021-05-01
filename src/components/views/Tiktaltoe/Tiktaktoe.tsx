@@ -1,4 +1,4 @@
-import React, {useReducer, useCallback} from 'react';
+import React, {useEffect, useReducer, useCallback} from 'react';
 import './Tiktaktoe.css';
 import Table from './Sections/Table';
 
@@ -10,12 +10,14 @@ const initialState:any = {
         ['','',''],
         ['','',''],
         ['','','']
-    ]
+    ],
+    recentCell:Array(-1, -1)
 }
 
 export const SET_WINNER = 'SET_WINNER';
 export const CLICK_CELL = 'CLICK_CELL';
 export const CHANGE_TURN = 'CHANGE_TURN';
+export const RESET_GAME = 'RESET_GAME';
 
 // state 어떻게 바꿀지 정의
 const reducer = (state:any, action:any) => {
@@ -34,7 +36,8 @@ const reducer = (state:any, action:any) => {
             tableData[action.row][action.cell] = state.turn;
             return {
                 ...state,
-                tableData
+                tableData,
+                recentCell:[action.row, action.cell]
             }
         }
         case CHANGE_TURN: {
@@ -43,14 +46,72 @@ const reducer = (state:any, action:any) => {
                 turn: state.turn === 'O' ? 'X' : 'O',
             }
         }
+        case RESET_GAME: {
+            return {
+                ...state,
+                turn:'O',
+                tableData:[
+                    ['','',''],
+                    ['','',''],
+                    ['','','']
+                ],
+                recentCell:Array(-1, -1)
+            }
+        }
+        default: return state;
     }
-
 }
 
 // useReducer : 하나의 state와 setState로 통일 가능
 export default function Tiktaktoe() {
     // dispatch 통해 state 값 update
     const [state, dispatch] = useReducer(reducer, initialState);
+    const {winner, turn, tableData, recentCell} = state;
+    // 비동기 처리 위해 설정
+    useEffect(() => {
+        const [row, cell] = recentCell;
+        if (row < 0) {
+            return;
+        }
+        let win = false;
+        // 가로
+        if ((tableData[row][0] === turn) && (tableData[row][1] === turn) && (tableData[row][2] === turn)) {
+            win = true;
+        }
+        // 세로
+        if ((tableData[0][cell] === turn) && (tableData[1][cell] === turn) && (tableData[2][cell] === turn)) {
+            win = true;
+        }
+        // 대각선
+        if ((tableData[0][0] === turn) && (tableData[1][1] === turn) && (tableData[2][2] === turn)) {
+            win = true;
+        }
+        if ((tableData[0][2] === turn) && (tableData[1][1] === turn) && (tableData[2][0] === turn)) {
+            win = true;
+        }
+        if (win) {
+            dispatch({type:SET_WINNER, winner:turn});   
+            dispatch({type:RESET_GAME});     
+        } else {
+            // all => true : 칸이 다 참 / false : 칸이 다 안 참 
+            // all = true : 무승부
+            let all = true;
+            // 무승부 검사
+            tableData.forEach((row:any) => {
+                row.forEach((cell:any) => {
+                    if (!cell) {
+                        all = false;
+                    }
+                });
+            }); 
+            if (all) {
+                dispatch({type:RESET_GAME});     
+            } else {
+                // td에서 비동기로 실행되어 버그 발생하므로 winner 없을 때 실행되도록 설정
+                dispatch({type:CHANGE_TURN});
+            }
+        }
+    }, [tableData])
 
     const onClickTable = useCallback(() => {
         dispatch({type:SET_WINNER, winner:'O'});
@@ -58,8 +119,8 @@ export default function Tiktaktoe() {
 
     return(
         <React.Fragment>
-            <Table onClick={onClickTable} tableData={state.tableData} dispatch={dispatch} />
-            {state.winner && <div>{state.winner} win!</div>}
+            <Table onClick={onClickTable} tableData={tableData} dispatch={dispatch} />
+            {winner && <div>{winner} win!</div>}
         </React.Fragment>
     );
 }
