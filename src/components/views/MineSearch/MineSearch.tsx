@@ -83,7 +83,30 @@ const reducer = (state:any, action:any) => {
         case OPEN_CELL: {
             const tableData = [...state.tableData];
             tableData[action.row] = [...state.tableData[action.row]];
-            tableData[action.row][action.cell] = CODE.OPENED;
+            // tableData[action.row][action.cell] = CODE.OPENED;
+            let around:any = [];
+            if (tableData[action.row - 1]) {
+                around = around.concat(
+                    tableData[action.row - 1][action.cell - 1], 
+                    tableData[action.row - 1][action.cell],
+                    tableData[action.row - 1][action.cell + 1]
+                );
+            }
+            around = around.concat(
+                tableData[action.row][action.cell - 1], 
+                tableData[action.row][action.cell + 1],
+            )
+            if (tableData[action.row + 1]) {
+                around = around.concat(
+                    tableData[action.row + 1][action.cell - 1], 
+                    tableData[action.row + 1][action.cell],
+                    tableData[action.row + 1][action.cell + 1]
+                );
+            }
+            const count = around.filter((v:any) => 
+                [CODE.MINE, CODE.FLAG_MINE, CODE.QUESTION_MINE].includes(v)
+            ).length;
+            tableData[action.row][action.cell] = count;
             return {
                 ...state,
                 tableData
