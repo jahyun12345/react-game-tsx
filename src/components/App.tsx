@@ -11,7 +11,7 @@ import NumberBaseball from './views/NumberBaseball/NumberBaseball';
 import Responsecheck from './views/Responsecheck/Responsecheck';
 import RSP from './views/RSP/RSP';
 import Lottery from './views/Lottery/Lottery';
-import Tiktaktoe from './views/Tiktaltoe/Tiktaktoe';
+import Tiktaktoe from './views/Tiktaktoe/Tiktaktoe';
 
 function App() {
   return (
