@@ -12,6 +12,7 @@ export default function Main() {
             <a href="/rsp">RSP</a>
             <a href="/lottery">LOTTERY</a>
             <a href="/tiktaktoe">TIKTAKTOE</a>
+            <a href="/minesearch">MINESEARCH</a>
         </div>
     );
 }
