@@ -82,31 +82,81 @@ const reducer = (state:any, action:any) => {
             }
         case OPEN_CELL: {
             const tableData = [...state.tableData];
-            tableData[action.row] = [...state.tableData[action.row]];
-            // tableData[action.row][action.cell] = CODE.OPENED;
-            let around:any = [];
-            if (tableData[action.row - 1]) {
+            // tableData[row] = [...state.tableData[row]];
+            // 모든 칸의 데이터 가져옴
+            tableData.forEach((row:any, i:any) => {
+                tableData[i] = [...state.tableData[i]];
+            })
+            const checked:any = [];
+            const checkAround = (row:any, cell:any) => {
+                // 이미 열려있는 칸에서 작동되지 않도록 설정
+                if ([CODE.OPENED, CODE.FLAG_MINE, CODE.FLAG, CODE.QUESTION_MINE, CODE.QUESTION].includes([row][cell])) {
+                    return;
+                }
+                // 상하좌우 칸이 아닌 경우 작동되지 않도록 설정
+                if (row < 0 || row >= tableData.length || cell < 0 || cell >= tableData[0].length) {
+                    return;
+                }
+                // 이미 검사한 칸
+                if (checked.includes(row + ',' + cell)) {
+                    return;
+                // 검사 X => checked에 넣어줌
+                } else {
+                    checked.push(row + ',' + cell);
+                }
+                // tableData[row][cell] = CODE.OPENED;
+                // 남은 지뢰 개수 표시
+                let around:any = [];
+                if (tableData[row - 1]) {
+                    around = around.concat(
+                        tableData[row - 1][cell - 1], 
+                        tableData[row - 1][cell],
+                        tableData[row - 1][cell + 1]
+                    );
+                }
                 around = around.concat(
-                    tableData[action.row - 1][action.cell - 1], 
-                    tableData[action.row - 1][action.cell],
-                    tableData[action.row - 1][action.cell + 1]
-                );
+                    tableData[row][cell - 1], 
+                    tableData[row][cell + 1],
+                )
+                if (tableData[action.row + 1]) {
+                    around = around.concat(
+                        tableData[row + 1][cell - 1], 
+                        tableData[row + 1][cell],
+                        tableData[row + 1][cell + 1]
+                    );
+                }
+                // 좌우칸 없는 경우 필터링 되어서 사라짐
+                const count = around.filter((v:any) => 
+                    [CODE.MINE, CODE.FLAG_MINE, CODE.QUESTION_MINE].includes(v)
+                ).length;
+                tableData[row][cell] = count;
+                // 지뢰 없는 부분 한 번에 열리도록
+                // 클릭한 칸이 빈 칸이면 주변 다 체크
+                if (count === 0) {
+                    const near = [];
+                    if (row - 1 > - 1) {
+                        near.push([row - 1, cell - 1]);
+                        near.push([row - 1, cell]);
+                        near.push([row - 1, cell + 1]);
+                    }
+                    near.push([row, cell - 1]);
+                    near.push([row, cell + 1]);
+                    if (row + 1 > tableData.length) {
+                        near.push([row + 1, cell - 1]);
+                        near.push([row + 1, cell]);
+                        near.push([row + 1, cell + 1]);
+                    }
+                    // 좌우칸 없는 경우 필터링 되어서 사라짐
+                    near.forEach((n:any) => {
+                        if (tableData[n[0]][n[1]] !== CODE.OPENED) {
+                            checkAround(n[0], n[1]);
+                        }
+                    });
+                } else {
+
+                }
             }
-            around = around.concat(
-                tableData[action.row][action.cell - 1], 
-                tableData[action.row][action.cell + 1],
-            )
-            if (tableData[action.row + 1]) {
-                around = around.concat(
-                    tableData[action.row + 1][action.cell - 1], 
-                    tableData[action.row + 1][action.cell],
-                    tableData[action.row + 1][action.cell + 1]
-                );
-            }
-            const count = around.filter((v:any) => 
-                [CODE.MINE, CODE.FLAG_MINE, CODE.QUESTION_MINE].includes(v)
-            ).length;
-            tableData[action.row][action.cell] = count;
+            checkAround(action.row, action.cell);
             return {
                 ...state,
                 tableData
